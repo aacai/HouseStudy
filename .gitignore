@@ -27,3 +27,6 @@ xcuserdata/
 
 # Kotlin/JS + Compose web build outputs
 kotlin-js-store/
+
+# Playwright CLI artifacts
+.playwright-cli/
