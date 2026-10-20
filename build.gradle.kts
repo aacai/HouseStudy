@@ -9,3 +9,5 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.kotlinSerialization) apply false
 }
+
+extra["appVersion"] = "1.0.0"

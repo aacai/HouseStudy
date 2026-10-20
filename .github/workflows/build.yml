@@ -81,7 +81,7 @@ jobs:
         run: |
           VER=$(sed -nE 's/^extra\["appVersion"\] = "([^"]+)".*/\1/p' build.gradle.kts | head -1)
           cd androidApp/build/outputs/apk/release
-          for f in *.apk; do mv "$f" "ClipSync-$VER-release.apk"; done
+          for f in *.apk; do mv "$f" "HouseStudy-$VER-release.apk"; done
           ls -1
 
       - name: Upload Android artifacts
@@ -140,13 +140,13 @@ jobs:
           find desktopApp/build/compose/logs -name 'jpackage-*-err.txt' -print -exec cat {} \; 2>/dev/null || true
           find desktopApp/build/compose/logs -name 'jpackage-*-out.txt' -print -exec cat {} \; 2>/dev/null || true
 
-      - name: Rename packages to ClipSync-<version>-<arch>
+      - name: Rename packages to HouseStudy-<version>-<arch>
         run: |
           VER=$(sed -nE 's/^extra\["appVersion"\] = "([^"]+)".*/\1/p' build.gradle.kts | head -1)
           cd desktopApp/build/compose/binaries/main
           for ext in deb msi dmg; do
             find . -type f -name "*.$ext" | while read -r f; do
-              mv "$f" "$(dirname "$f")/ClipSync-$VER-${{ matrix.arch }}.$ext"
+              mv "$f" "$(dirname "$f")/HouseStudy-$VER-${{ matrix.arch }}.$ext"
             done
           done
           find . -type f \( -name "*.deb" -o -name "*.msi" -o -name "*.dmg" \)
@@ -187,12 +187,12 @@ jobs:
       - name: Build desktop package
         run: ./gradlew :desktopApp:packageDeb --stacktrace
 
-      - name: Rename packages to ClipSync-<version>-arm64
+      - name: Rename packages to HouseStudy-<version>-arm64
         run: |
           VER=$(sed -nE 's/^extra\["appVersion"\] = "([^"]+)".*/\1/p' build.gradle.kts | head -1)
           cd desktopApp/build/compose/binaries/main
           find . -type f -name "*.deb" | while read -r f; do
-            mv "$f" "$(dirname "$f")/ClipSync-$VER-arm64.deb"
+            mv "$f" "$(dirname "$f")/HouseStudy-$VER-arm64.deb"
           done
           find . -type f -name "*.deb"
 
@@ -256,6 +256,8 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
@@ -294,13 +296,13 @@ jobs:
       - name: Generate release notes manifest
         run: |
           {
-            echo "# ClipSync ${GITHUB_REF_NAME} 发布包"
+            echo "# HouseStudy ${GITHUB_REF_NAME} 发布包"
             echo
             find artifacts -type f -not -path 'artifacts/web/*' | sort | while read -r f; do
               NAME=$(basename "$f")
               case "$NAME" in
                 *.apk) desc="Android 安装包（正式签名，可直接安装）" ;;
-                *.dmg) desc="macOS 安装包（arm64，拖入「应用程序」；首次打开被 Gatekeeper 拦时执行 xattr -dr com.apple.quarantine \"/Applications/ClipSync.app\"）" ;;
+                *.dmg) desc="macOS 安装包（arm64，拖入「应用程序」；首次打开被 Gatekeeper 拦时执行 xattr -dr com.apple.quarantine \"/Applications/HouseStudy.app\"）" ;;
                 *.msi) desc="Windows 安装包（MSI）" ;;
                 *-x64.deb) desc="Linux 安装包（x64，dpkg -i 安装）" ;;
                 *-arm64.deb) desc="Linux 安装包（arm64，dpkg -i 安装）" ;;
@@ -308,7 +310,7 @@ jobs:
               esac
               printf -- '- `%s` — %s\n' "$NAME" "$desc"
             done
-            printf -- '- `web.zip` — Web 端（WasmJS），解压后静态托管即可，在线版：https://aacai.github.io/ClipSync/\n'
+            printf -- '- `web.zip` — Web 端（WasmJS），解压后静态托管即可，在线版：https://aacai.github.io/HouseStudy/\n'
           } > release_notes.md
           cat release_notes.md
 
