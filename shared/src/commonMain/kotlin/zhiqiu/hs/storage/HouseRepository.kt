@@ -8,35 +8,34 @@ import kotlinx.serialization.json.Json
 typealias LayoutMap = Map<Int, List<String>>
 
 object HouseRepository {
-    private val store = provideKeyValueStore()
     private val json = Json { ignoreUnknownKeys = true }
     private const val DEFAULT = "default"
     private const val ARCHIVES = "archives"
 
     fun saveDefault(map: LayoutMap) {
-        store.setString(DEFAULT, json.encodeToString(map))
+        AppStore.putString(DEFAULT, json.encodeToString(map))
     }
 
     fun loadDefault(): LayoutMap? =
-        store.getString(DEFAULT)?.let { runCatching { json.decodeFromString<LayoutMap>(it) }.getOrNull() }
+        AppStore.getStringOrNull(DEFAULT)?.let { runCatching { json.decodeFromString<LayoutMap>(it) }.getOrNull() }
 
     fun saveNamed(name: String, map: LayoutMap) {
         if (name.isBlank()) return
-        store.setString(name, json.encodeToString(map))
+        AppStore.putString(name, json.encodeToString(map))
         val set = listArchives().toMutableSet().apply { add(name) }
-        store.setString(ARCHIVES, json.encodeToString(set))
+        AppStore.putString(ARCHIVES, json.encodeToString(set))
     }
 
     fun loadNamed(name: String): LayoutMap? =
-        store.getString(name)?.let { runCatching { json.decodeFromString<LayoutMap>(it) }.getOrNull() }
+        AppStore.getStringOrNull(name)?.let { runCatching { json.decodeFromString<LayoutMap>(it) }.getOrNull() }
 
     fun deleteNamed(name: String) {
-        store.setString(name, "{}")
+        AppStore.putString(name, "{}")
         val set = listArchives().toMutableSet().apply { remove(name) }
-        store.setString(ARCHIVES, json.encodeToString(set))
+        AppStore.putString(ARCHIVES, json.encodeToString(set))
     }
 
     fun listArchives(): Set<String> =
-        store.getString(ARCHIVES)?.let { runCatching { json.decodeFromString<Set<String>>(it) }.getOrNull() }
+        AppStore.getStringOrNull(ARCHIVES)?.let { runCatching { json.decodeFromString<Set<String>>(it) }.getOrNull() }
             ?: emptySet()
 }

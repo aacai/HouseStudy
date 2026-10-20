@@ -71,12 +71,13 @@ fun PrimaryButton(
         }
     }
     if (tooltip != null) {
-        TooltipBox(
-            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-            tooltip = { PlainTooltip { Text(tooltip) } },
-            state = rememberTooltipState(),
-            modifier = modifier
-        ) { visual() }
+        Box(modifier) {
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                tooltip = { PlainTooltip { Text(tooltip) } },
+                state = rememberTooltipState()
+            ) { visual() }
+        }
     } else {
         Box(modifier) { visual() }
     }
@@ -119,12 +120,13 @@ fun GhostButton(
         }
     }
     if (tooltip != null) {
-        TooltipBox(
-            positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
-            tooltip = { PlainTooltip { Text(tooltip) } },
-            state = rememberTooltipState(),
-            modifier = modifier
-        ) { visual() }
+        Box(modifier) {
+            TooltipBox(
+                positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+                tooltip = { PlainTooltip { Text(tooltip) } },
+                state = rememberTooltipState()
+            ) { visual() }
+        }
     } else {
         Box(modifier) { visual() }
     }

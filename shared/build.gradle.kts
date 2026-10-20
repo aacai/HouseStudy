@@ -66,6 +66,7 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.backdrop)
             implementation(libs.icons.lucide)
+            implementation(libs.multiplatform.settings)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
