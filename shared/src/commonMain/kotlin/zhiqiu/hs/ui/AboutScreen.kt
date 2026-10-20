@@ -1,6 +1,10 @@
 package zhiqiu.hs.ui
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,12 +15,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -30,7 +37,7 @@ import org.jetbrains.compose.resources.stringResource
 import zhiqiu.hs.generated.resources.*
 
 @Composable
-fun AboutScreen() {
+fun AboutScreen(langTag: String, onLangChange: (String) -> Unit) {
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(bottom = 18.dp)
     ) {
@@ -48,6 +55,30 @@ fun AboutScreen() {
                 fontSize = 12.5.sp,
                 lineHeight = 19.sp
             )
+        }
+
+        Spacer(Modifier.height(12.dp))
+        AboutCard(stringResource(Res.string.language_title)) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                LangOption(
+                    stringResource(Res.string.lang_system),
+                    langTag.isEmpty(),
+                    Modifier.weight(1f)
+                ) { onLangChange("") }
+                LangOption(
+                    stringResource(Res.string.lang_zh),
+                    langTag == "zh",
+                    Modifier.weight(1f)
+                ) { onLangChange("zh") }
+                LangOption(
+                    stringResource(Res.string.lang_en),
+                    langTag == "en",
+                    Modifier.weight(1f)
+                ) { onLangChange("en") }
+            }
         }
 
         Spacer(Modifier.height(12.dp))
@@ -76,6 +107,30 @@ private fun AboutCard(title: String, content: @Composable () -> Unit) {
             SectionTitle(title)
             content()
         }
+    }
+}
+
+@Composable
+private fun LangOption(text: String, selected: Boolean, modifier: Modifier, onClick: () -> Unit) {
+    Box(
+        modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(if (selected) Palette.Gold.copy(alpha = 0.18f) else Color.White.copy(alpha = 0.04f))
+            .border(
+                1.dp,
+                if (selected) Palette.Gold.copy(alpha = 0.55f) else Color.White.copy(alpha = 0.10f),
+                RoundedCornerShape(12.dp)
+            )
+            .clickable(onClick = onClick)
+            .padding(vertical = 10.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text,
+            color = if (selected) Palette.GoldSoft else Palette.TextSecondary,
+            fontSize = 12.sp,
+            fontWeight = if (selected) FontWeight.Medium else FontWeight.Normal
+        )
     }
 }
 

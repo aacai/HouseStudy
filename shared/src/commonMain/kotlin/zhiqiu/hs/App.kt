@@ -29,6 +29,7 @@ import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,6 +46,9 @@ import com.composables.icons.lucide.LayoutGrid
 import com.composables.icons.lucide.Lucide
 import org.jetbrains.compose.resources.stringResource
 import zhiqiu.hs.generated.resources.*
+import zhiqiu.hs.i18n.AppLang
+import zhiqiu.hs.i18n.AppLanguageProvider
+import zhiqiu.hs.storage.AppSettings
 import zhiqiu.hs.ui.AboutScreen
 import zhiqiu.hs.ui.AppBackground
 import zhiqiu.hs.ui.DestinyScreen
@@ -55,19 +59,25 @@ import zhiqiu.hs.ui.Palette
 
 @Composable
 fun App() {
-    HouseTheme {
-        var tab by remember { mutableIntStateOf(0) }
-        AppBackground {
-            Column(Modifier.fillMaxSize()) {
-                TopBar()
-                Box(Modifier.weight(1f).fillMaxWidth()) {
-                    when (tab) {
-                        0 -> LayoutScreen()
-                        1 -> DestinyScreen()
-                        else -> AboutScreen()
+    var langTag by remember { mutableStateOf(AppSettings.language()) }
+    AppLanguageProvider(AppLang.fromTag(langTag)) {
+        HouseTheme {
+            var tab by remember { mutableIntStateOf(0) }
+            AppBackground {
+                Column(Modifier.fillMaxSize()) {
+                    TopBar()
+                    Box(Modifier.weight(1f).fillMaxWidth()) {
+                        when (tab) {
+                            0 -> LayoutScreen()
+                            1 -> DestinyScreen()
+                            else -> AboutScreen(langTag) { tag ->
+                                langTag = tag
+                                AppSettings.setLanguage(tag)
+                            }
+                        }
                     }
+                    BottomBar(tab) { tab = it }
                 }
-                BottomBar(tab) { tab = it }
             }
         }
     }

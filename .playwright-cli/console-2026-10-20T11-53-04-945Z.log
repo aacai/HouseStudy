@@ -1,0 +1,11 @@
+[     107ms] [INFO] [webpack-dev-server] Server started: Hot Module Replacement enabled, Live Reloading enabled, Progress disabled, Overlay enabled. @ webpack-internal:///../../../../../../.kotlin/kotlin-npm-tooling/yarn/9c7852378f220e63c4f92e7d93026c2f/node_modules/webpack-dev-server/client/modules/logger/index.js:607
+[     108ms] [LOG] [HMR] Waiting for update signal from WDS... @ webpack-internal:///../../../../../../.kotlin/kotlin-npm-tooling/yarn/9c7852378f220e63c4f92e7d93026c2f/node_modules/webpack/hot/log.js:38
+[     187ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:8080/favicon.ico:0
+[    1841ms] [WARNING] WebGL: INVALID_ENUM: getParameter: invalid parameter name, WEBGL_debug_renderer_info not enabled @ webpack-internal:///./kotlin/skiko.mjs:1015
+[    1841ms] [WARNING] WebGL: INVALID_ENUM: getParameter: invalid parameter name, WEBGL_debug_renderer_info not enabled @ webpack-internal:///./kotlin/skiko.mjs:1015
+[    2582ms] [ERROR] Accessing `memory` via `wasmExports` is deprecated. Use `kotlin.wasm.unsafe.wasmMemory` or update dependencies. Read more: https://kotl.in/vr3szr @ webpack-internal:///./kotlin/HouseStudy-webApp.mjs:51
+[ 1110026ms] [INFO] [webpack-dev-server] Server started: Hot Module Replacement enabled, Live Reloading enabled, Progress disabled, Overlay enabled. @ webpack-internal:///../../../../../../.kotlin/kotlin-npm-tooling/yarn/9c7852378f220e63c4f92e7d93026c2f/node_modules/webpack-dev-server/client/modules/logger/index.js:607
+[ 1110029ms] [LOG] [HMR] Waiting for update signal from WDS... @ webpack-internal:///../../../../../../.kotlin/kotlin-npm-tooling/yarn/9c7852378f220e63c4f92e7d93026c2f/node_modules/webpack/hot/log.js:38
+[ 1110270ms] [WARNING] WebGL: INVALID_ENUM: getParameter: invalid parameter name, WEBGL_debug_renderer_info not enabled @ webpack-internal:///./kotlin/skiko.mjs:1015
+[ 1110270ms] [WARNING] WebGL: INVALID_ENUM: getParameter: invalid parameter name, WEBGL_debug_renderer_info not enabled @ webpack-internal:///./kotlin/skiko.mjs:1015
+[ 1110319ms] [ERROR] Accessing `memory` via `wasmExports` is deprecated. Use `kotlin.wasm.unsafe.wasmMemory` or update dependencies. Read more: https://kotl.in/vr3szr @ webpack-internal:///./kotlin/HouseStudy-webApp.mjs:51

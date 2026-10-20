@@ -1,11 +1,13 @@
 package zhiqiu.hs.storage
 
-private class MemoryKeyValueStore : KeyValueStore {
-    private val map = mutableMapOf<String, String>()
-    override fun getString(key: String): String? = map[key]
+import kotlinx.browser.window
+
+private class BrowserKeyValueStore : KeyValueStore {
+    private val prefix = "hs_"
+    override fun getString(key: String): String? = window.localStorage.getItem(prefix + key)
     override fun setString(key: String, value: String) {
-        map[key] = value
+        window.localStorage.setItem(prefix + key, value)
     }
 }
 
-actual fun provideKeyValueStore(): KeyValueStore = MemoryKeyValueStore()
+actual fun provideKeyValueStore(): KeyValueStore = BrowserKeyValueStore()
