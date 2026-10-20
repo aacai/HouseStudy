@@ -22,11 +22,6 @@ kotlin {
     
     jvm()
     
-    js {
-        browser()
-        binaries.executable()
-    }
-    
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser()
@@ -69,14 +64,18 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.backdrop)
+            implementation(libs.icons.lucide)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
-        jsMain.dependencies {
-            implementation(libs.wrappers.browser)
-        }
     }
+}
+
+compose.resources {
+    packageOfResClass = "zhiqiu.hs.generated.resources"
+    generateResClass = auto
 }
 
 dependencies {

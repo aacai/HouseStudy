@@ -16,6 +16,7 @@ kotlin-wrappers = "2026.9.3"
 kotlinx-coroutines = "1.11.0"
 material3 = "1.12.0-alpha03"
 serialization = "1.9.0"
+composables-icons = "1.1.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -38,6 +39,8 @@ compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-previ
 kotlinx-coroutinesSwing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 wrappers-browser = { module = "org.jetbrains.kotlin-wrappers:kotlin-browser", version.ref = "kotlin-wrappers" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+backdrop = { module = "io.github.kashif-mehmood-km:backdrop", version = "0.0.1-alpha02" }
+icons-lucide = { module = "com.composables:icons-lucide", version.ref = "composables-icons" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

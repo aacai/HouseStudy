@@ -29,11 +29,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.composables.icons.lucide.Calculator
+import com.composables.icons.lucide.Compass
+import com.composables.icons.lucide.Lucide
+import org.jetbrains.compose.resources.stringResource
 import zhiqiu.hs.core.FORTUNE_MAP
 import zhiqiu.hs.core.Gender
 import zhiqiu.hs.core.MingGuaResult
 import zhiqiu.hs.core.calculateMingGua
 import zhiqiu.hs.core.trigramByKey
+import zhiqiu.hs.generated.resources.*
+import zhiqiu.hs.i18n.directionLabel
+import zhiqiu.hs.i18n.elementLabel
+import zhiqiu.hs.i18n.genderLabel
+import zhiqiu.hs.i18n.groupLabel
+import zhiqiu.hs.i18n.starLabel
+import zhiqiu.hs.i18n.trigramLabel
 
 @Composable
 fun DestinyScreen() {
@@ -44,19 +55,28 @@ fun DestinyScreen() {
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(bottom = 18.dp)
     ) {
-        ScreenHeader("命卦推算", "输入出生年份与性别，推算八宅命卦与四吉四凶方位")
+        ScreenHeader(
+            stringResource(Res.string.destiny_title),
+            stringResource(Res.string.destiny_subtitle),
+            icon = Lucide.Compass
+        )
         Spacer(Modifier.height(14.dp))
 
         GlassCard(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
             Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                SectionTitle("基本信息")
-                InputField(year, { year = it.filter { c -> c.isDigit() }.take(4) }, "出生年份，如 1990")
+                SectionTitle(stringResource(Res.string.basic_info))
+                InputField(year, { year = it.filter { c -> c.isDigit() }.take(4) }, stringResource(Res.string.birth_year_placeholder))
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Gender.entries.forEach { g ->
-                        GenderOption(g.name, gender == g, Modifier.weight(1f)) { gender = g }
+                        GenderOption(genderLabel(g), gender == g, Modifier.weight(1f)) { gender = g }
                     }
                 }
-                PrimaryButton("推算命卦", Modifier.fillMaxWidth()) {
+                PrimaryButton(
+                    stringResource(Res.string.btn_calculate),
+                    Modifier.fillMaxWidth(),
+                    icon = Lucide.Calculator,
+                    tooltip = stringResource(Res.string.tip_calculate)
+                ) {
                     year.toIntOrNull()?.takeIf { it in 1900..2100 }?.let {
                         result = calculateMingGua(it, gender)
                     }
@@ -77,10 +97,10 @@ fun DestinyScreen() {
 private fun MingGuaCard(r: MingGuaResult) {
     GlassCard(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            SectionTitle("命卦")
+            SectionTitle(stringResource(Res.string.ming_gua_title))
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    "${r.trigram.key}卦",
+                    trigramLabel(r.trigram.key) + stringResource(Res.string.trigram_suffix),
                     color = Palette.TextPrimary,
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold
@@ -88,16 +108,24 @@ private fun MingGuaCard(r: MingGuaResult) {
                 Spacer(Modifier.width(12.dp))
                 Column {
                     Text(
-                        "${r.group.label} · 五行属${r.trigram.element.label}",
+                        stringResource(
+                            Res.string.element_template,
+                            groupLabel(r.group),
+                            elementLabel(r.trigram.element)
+                        ),
                         color = Palette.TextSecondary,
                         fontSize = 13.sp
                     )
                     Spacer(Modifier.height(4.dp))
-                    Text("后天数 ${r.number}", color = Palette.TextMuted, fontSize = 12.sp)
+                    Text(
+                        stringResource(Res.string.post_heaven, r.number),
+                        color = Palette.TextMuted,
+                        fontSize = 12.sp
+                    )
                 }
             }
             Text(
-                "布局时优先使用四吉方位，避开四凶方位。",
+                stringResource(Res.string.ming_gua_hint),
                 color = Palette.TextSecondary,
                 fontSize = 12.sp,
                 lineHeight = 18.sp
@@ -115,15 +143,25 @@ private fun FortuneCard(r: MingGuaResult) {
 
     GlassCard(Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-            SectionTitle("吉凶方位")
+            SectionTitle(stringResource(Res.string.fortune_title))
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("四吉", color = Palette.Jade, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-                    good.forEach { (dir, star) -> FortuneRow(dir, star.label, Palette.Jade) }
+                    Text(
+                        stringResource(Res.string.four_good),
+                        color = Palette.Jade,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    good.forEach { (dir, star) -> FortuneRow(directionLabel(dir), starLabel(star), Palette.Jade) }
                 }
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("四凶", color = Palette.Crimson, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
-                    bad.forEach { (dir, star) -> FortuneRow(dir, star.label, Palette.Crimson) }
+                    Text(
+                        stringResource(Res.string.four_bad),
+                        color = Palette.Crimson,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    bad.forEach { (dir, star) -> FortuneRow(directionLabel(dir), starLabel(star), Palette.Crimson) }
                 }
             }
         }

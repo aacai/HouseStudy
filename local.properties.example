@@ -1,0 +1,7 @@
+sdk.dir=/path/to/Android/sdk
+
+# Optional: release signing (skip to build unsigned)
+storeFile=key.jks
+storePassword=your_store_password
+keyAlias=appkey
+keyPassword=your_key_password

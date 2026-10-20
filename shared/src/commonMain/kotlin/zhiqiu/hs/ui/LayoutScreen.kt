@@ -35,12 +35,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.composables.icons.lucide.FileSearch
+import com.composables.icons.lucide.FolderOpen
+import com.composables.icons.lucide.LayoutGrid
+import com.composables.icons.lucide.Lucide
+import com.composables.icons.lucide.Save
+import org.jetbrains.compose.resources.stringResource
 import zhiqiu.hs.core.BAGUA_GRID
 import zhiqiu.hs.core.HouseData
 import zhiqiu.hs.core.HouseDataLoader
 import zhiqiu.hs.core.MEMBERS
 import zhiqiu.hs.core.interpretationFor
 import zhiqiu.hs.core.trigramByKey
+import zhiqiu.hs.generated.resources.*
+import zhiqiu.hs.i18n.directionLabel
+import zhiqiu.hs.i18n.memberLabel
 import zhiqiu.hs.storage.HouseRepository
 import zhiqiu.hs.storage.LayoutMap
 
@@ -66,7 +75,11 @@ fun LayoutScreen() {
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(bottom = 18.dp)
     ) {
-        ScreenHeader("户型布局", "点击九宫格放置成员或房间，再查看各方位的吉凶解读")
+        ScreenHeader(
+            stringResource(Res.string.layout_title),
+            stringResource(Res.string.layout_subtitle),
+            icon = Lucide.LayoutGrid
+        )
         Spacer(Modifier.height(14.dp))
 
         BaguaGrid(layout) { selectedIndex = it }
@@ -76,9 +89,24 @@ fun LayoutScreen() {
             Modifier.fillMaxWidth().padding(horizontal = 20.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-            PrimaryButton("查看解析", Modifier.weight(1f)) { showAnalysis = true }
-            GhostButton("存档", Modifier.weight(1f)) { showSave = true }
-            GhostButton("读档", Modifier.weight(1f)) {
+            PrimaryButton(
+                stringResource(Res.string.btn_view_analysis),
+                Modifier.weight(1f),
+                icon = Lucide.FileSearch,
+                tooltip = stringResource(Res.string.tip_view_analysis)
+            ) { showAnalysis = true }
+            GhostButton(
+                stringResource(Res.string.btn_save),
+                Modifier.weight(1f),
+                icon = Lucide.Save,
+                tooltip = stringResource(Res.string.tip_save)
+            ) { showSave = true }
+            GhostButton(
+                stringResource(Res.string.btn_load),
+                Modifier.weight(1f),
+                icon = Lucide.FolderOpen,
+                tooltip = stringResource(Res.string.tip_load)
+            ) {
                 archives = HouseRepository.listArchives()
                 showArchive = true
             }
@@ -124,7 +152,6 @@ fun LayoutScreen() {
     }
 }
 
-/** 唯一成员只能出现在一个宫位；厕/厨/厅可重复。 */
 private fun applySelection(layout: LayoutMap, idx: Int, members: List<String>): LayoutMap {
     val unique = members.filter { it !in Repeatable }
     val cleaned = layout.mapValues { (i, list) ->
@@ -170,7 +197,7 @@ private fun BaguaCell(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                dir,
+                directionLabel(dir),
                 color = Palette.TextSecondary,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Medium
@@ -186,7 +213,7 @@ private fun BaguaCell(
                 Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
                     members.chunked(2).forEach { row ->
                         Row(horizontalArrangement = Arrangement.spacedBy(3.dp)) {
-                            row.forEach { m -> Pill(m) }
+                            row.forEach { m -> Pill(memberLabel(m)) }
                         }
                     }
                 }
@@ -205,12 +232,12 @@ private fun MemberPickerDialog(
     Dialog(onDismissRequest = onDismiss) {
         GlassCard(Modifier.fillMaxWidth().padding(20.dp)) {
             Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                SectionTitle("选择成员 / 房间")
+                SectionTitle(stringResource(Res.string.select_member_title))
                 MEMBERS.chunked(3).forEach { row ->
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         row.forEach { (display, short) ->
                             SelectChip(
-                                text = display,
+                                text = memberLabel(display),
                                 selected = selected.contains(short),
                                 modifier = Modifier.weight(1f)
                             ) {
@@ -221,8 +248,8 @@ private fun MemberPickerDialog(
                     }
                 }
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    GhostButton("清空", Modifier.weight(1f)) { selected = emptySet() }
-                    PrimaryButton("确定", Modifier.weight(1f)) { onConfirm(selected.toList()) }
+                    GhostButton(stringResource(Res.string.action_clear), Modifier.weight(1f)) { selected = emptySet() }
+                    PrimaryButton(stringResource(Res.string.action_confirm), Modifier.weight(1f)) { onConfirm(selected.toList()) }
                 }
             }
         }
@@ -269,9 +296,13 @@ private fun AnalysisDialog(layout: LayoutMap, data: HouseData?, onDismiss: () ->
                     .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(14.dp)
             ) {
-                SectionTitle("方位解析")
+                SectionTitle(stringResource(Res.string.analysis_title))
                 if (layout.isEmpty()) {
-                    Text("尚未放置任何成员或房间。", color = Palette.TextSecondary, fontSize = 12.sp)
+                    Text(
+                        stringResource(Res.string.empty_layout),
+                        color = Palette.TextSecondary,
+                        fontSize = 12.sp
+                    )
                 } else {
                     BAGUA_GRID.forEachIndexed { idx, pair ->
                         val key = pair.first
@@ -279,20 +310,23 @@ private fun AnalysisDialog(layout: LayoutMap, data: HouseData?, onDismiss: () ->
                         val members = layout[idx] ?: return@forEachIndexed
                         if (members.isEmpty()) return@forEachIndexed
                         Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            val names = members.map { m ->
+                                memberLabel(MEMBERS.firstOrNull { it.second == m }?.first ?: m)
+                            }
                             Text(
-                                "$dir · ${members.joinToString("、") { m -> MEMBERS.firstOrNull { it.second == m }?.first ?: m }}",
+                                "${directionLabel(dir)} · ${names.joinToString("、")}",
                                 color = Palette.GoldSoft,
                                 fontSize = 13.sp,
                                 fontWeight = FontWeight.Medium
                             )
                             members.forEach { m ->
-                                val txt = data?.interpretationFor(m, key) ?: "暂无解读"
+                                val txt = data?.interpretationFor(m, key) ?: stringResource(Res.string.no_interpretation)
                                 Text(txt, color = Palette.TextSecondary, fontSize = 12.sp, lineHeight = 18.sp)
                             }
                         }
                     }
                 }
-                GhostButton("关闭", Modifier.fillMaxWidth()) { onDismiss() }
+                GhostButton(stringResource(Res.string.action_close), Modifier.fillMaxWidth()) { onDismiss() }
             }
         }
     }
@@ -304,11 +338,15 @@ private fun SaveDialog(onDismiss: () -> Unit, onSave: (String) -> Unit) {
     Dialog(onDismissRequest = onDismiss) {
         GlassCard(Modifier.fillMaxWidth().padding(20.dp)) {
             Column(Modifier.padding(20.dp), verticalArrangement = Arrangement.spacedBy(14.dp)) {
-                SectionTitle("保存方案")
-                InputField(name, { name = it }, "输入方案名称")
+                SectionTitle(stringResource(Res.string.save_title))
+                InputField(name, { name = it }, stringResource(Res.string.save_name_placeholder))
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    GhostButton("取消", Modifier.weight(1f)) { onDismiss() }
-                    PrimaryButton("保存", Modifier.weight(1f), enabled = name.isNotBlank()) { onSave(name.trim()) }
+                    GhostButton(stringResource(Res.string.action_cancel), Modifier.weight(1f)) { onDismiss() }
+                    PrimaryButton(
+                        stringResource(Res.string.action_save),
+                        Modifier.weight(1f),
+                        enabled = name.isNotBlank()
+                    ) { onSave(name.trim()) }
                 }
             }
         }
@@ -328,9 +366,13 @@ private fun ArchiveDialog(
                 Modifier.padding(20.dp).heightIn(max = 480.dp).verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                SectionTitle("读取方案")
+                SectionTitle(stringResource(Res.string.archive_title))
                 if (archives.isEmpty()) {
-                    Text("暂无存档。", color = Palette.TextSecondary, fontSize = 12.sp)
+                    Text(
+                        stringResource(Res.string.empty_archive),
+                        color = Palette.TextSecondary,
+                        fontSize = 12.sp
+                    )
                 } else {
                     archives.forEach { name ->
                         Row(
@@ -340,13 +382,13 @@ private fun ArchiveDialog(
                         ) {
                             Text(name, color = Palette.TextPrimary, fontSize = 13.sp)
                             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                GhostButton("读取") { onLoad(name) }
-                                GhostButton("删除") { onDelete(name) }
+                                GhostButton(stringResource(Res.string.action_load)) { onLoad(name) }
+                                GhostButton(stringResource(Res.string.action_delete)) { onDelete(name) }
                             }
                         }
                     }
                 }
-                GhostButton("关闭", Modifier.fillMaxWidth()) { onDismiss() }
+                GhostButton(stringResource(Res.string.action_close), Modifier.fillMaxWidth()) { onDismiss() }
             }
         }
     }

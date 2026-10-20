@@ -18,9 +18,14 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.PlainTooltip
 import androidx.compose.material3.Text
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -30,12 +35,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.composables.icons.lucide.Compass
+import com.composables.icons.lucide.Info
+import com.composables.icons.lucide.LayoutGrid
+import com.composables.icons.lucide.Lucide
+import org.jetbrains.compose.resources.stringResource
+import zhiqiu.hs.generated.resources.*
 import zhiqiu.hs.ui.AboutScreen
 import zhiqiu.hs.ui.AppBackground
 import zhiqiu.hs.ui.DestinyScreen
+import zhiqiu.hs.ui.GlassCard
 import zhiqiu.hs.ui.HouseTheme
 import zhiqiu.hs.ui.LayoutScreen
 import zhiqiu.hs.ui.Palette
@@ -71,51 +84,90 @@ private fun TopBar() {
             .padding(horizontal = 20.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(3.dp)
     ) {
-        Text("HouseStudy", color = Palette.TextPrimary, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        Text("八宅风水 · 户型与命理", color = Palette.TextSecondary, fontSize = 12.sp)
+        Text(
+            stringResource(Res.string.app_name),
+            color = Palette.TextPrimary,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            stringResource(Res.string.app_tagline),
+            color = Palette.TextSecondary,
+            fontSize = 12.sp
+        )
     }
 }
 
 @Composable
 private fun BottomBar(selected: Int, onSelect: (Int) -> Unit) {
-    Row(
+    Box(
         Modifier
             .fillMaxWidth()
-            .background(Palette.Surface.copy(alpha = 0.9f))
             .windowInsetsPadding(
                 WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom + WindowInsetsSides.Horizontal)
             )
-            .padding(horizontal = 12.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 20.dp, vertical = 12.dp)
     ) {
-        NavItem("布局", selected == 0) { onSelect(0) }
-        NavItem("命理", selected == 1) { onSelect(1) }
-        NavItem("关于", selected == 2) { onSelect(2) }
+        GlassCard(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(50)
+        ) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                NavItem(
+                    stringResource(Res.string.tab_layout),
+                    Lucide.LayoutGrid,
+                    stringResource(Res.string.tip_layout),
+                    selected == 0
+                ) { onSelect(0) }
+                NavItem(
+                    stringResource(Res.string.tab_destiny),
+                    Lucide.Compass,
+                    stringResource(Res.string.tip_destiny),
+                    selected == 1
+                ) { onSelect(1) }
+                NavItem(
+                    stringResource(Res.string.tab_about),
+                    Lucide.Info,
+                    stringResource(Res.string.tip_about),
+                    selected == 2
+                ) { onSelect(2) }
+            }
+        }
     }
 }
 
 @Composable
-private fun NavItem(label: String, selected: Boolean, onClick: () -> Unit) {
-    Column(
-        Modifier
-            .clip(RoundedCornerShape(12.dp))
-            .clickable(onClick = onClick)
-            .padding(horizontal = 22.dp, vertical = 8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+private fun NavItem(label: String, icon: ImageVector, tip: String, selected: Boolean, onClick: () -> Unit) {
+    TooltipBox(
+        positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Above),
+        tooltip = { PlainTooltip { Text(tip) } },
+        state = rememberTooltipState()
     ) {
-        Box(
+        Column(
             Modifier
-                .size(5.dp)
-                .clip(CircleShape)
-                .background(if (selected) Palette.Primary else Color.Transparent)
-        )
-        Spacer(Modifier.height(6.dp))
-        Text(
-            label,
-            color = if (selected) Palette.TextPrimary else Palette.TextMuted,
-            fontSize = 12.sp,
-            fontWeight = if (selected) FontWeight.Medium else FontWeight.Normal
-        )
+                .clip(RoundedCornerShape(50))
+                .background(if (selected) Color.White.copy(alpha = 0.14f) else Color.Transparent)
+                .clickable(onClick = onClick)
+                .padding(horizontal = 26.dp, vertical = 10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                modifier = Modifier.size(20.dp),
+                tint = if (selected) Palette.TextPrimary else Palette.TextMuted
+            )
+            Spacer(Modifier.height(4.dp))
+            Text(
+                label,
+                color = if (selected) Palette.TextPrimary else Palette.TextMuted,
+                fontSize = 13.sp,
+                fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal
+            )
+        }
     }
 }

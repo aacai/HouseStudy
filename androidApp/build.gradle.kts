@@ -1,9 +1,16 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeCompiler)
 }
+
+val keystoreProps = Properties().apply {
+    val f = rootProject.file("local.properties")
+    if (f.exists()) f.inputStream().use { load(it) }
+}
+val hasKeystore = !keystoreProps.getProperty("storePassword").isNullOrBlank()
 
 kotlin {
     compilerOptions {
@@ -37,19 +44,22 @@ android {
     }
     signingConfigs {
         create("release") {
-            storeFile = file("../key.jks")
-            storePassword = "love1119"
-            keyAlias = "appkey"
-            keyPassword = "loveaacai"
+            if (hasKeystore) {
+                storeFile = rootProject.file(keystoreProps.getProperty("storeFile", "key.jks"))
+                storePassword = keystoreProps.getProperty("storePassword")
+                keyAlias = keystoreProps.getProperty("keyAlias", "appkey")
+                keyPassword = keystoreProps.getProperty("keyPassword")
+            }
         }
     }
     buildTypes {
         debug {
-            signingConfig = signingConfigs.getByName("release")
+            signingConfig = if (hasKeystore) signingConfigs.getByName("release") else null
         }
         release {
-            isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            isShrinkResources = true
+            signingConfig = if (hasKeystore) signingConfigs.getByName("release") else null
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

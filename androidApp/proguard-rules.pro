@@ -1,21 +1,36 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+-keepattributes *Annotation*, InnerClasses, Signature, EnclosingMethod, RuntimeVisibleAnnotations, RuntimeVisibleParameterAnnotations
+-keep class kotlin.Metadata { *; }
+-dontwarn kotlin.**
+-dontnote kotlin.**
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+-keep @kotlinx.serialization.Serializable class * { *; }
+-keep class **$$serializer { *; }
+-keepclassmembers class **$Companion {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+-keepclasseswithmembers class ** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+-dontwarn kotlinx.serialization.**
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+-keep class androidx.compose.** { *; }
+-keep class org.jetbrains.compose.** { *; }
+-dontwarn androidx.compose.**
+-dontwarn org.jetbrains.compose.**
+-keep @androidx.compose.runtime.Composable class * { *; }
+-keepclassmembers class * {
+    @androidx.compose.runtime.Composable *;
+}
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+-keep class com.kashif_e.backdrop.** { *; }
+-dontwarn com.kashif_e.backdrop.**
+
+-keep class com.composables.icons.lucide.** { *; }
+-keep class com.composables.icons.lucide.*Kt { *; }
+-dontwarn com.composables.icons.lucide.**
+
+-keep class org.jetbrains.skiko.** { *; }
+-dontwarn org.jetbrains.skiko.**
+
+-keep class zhiqiu.hs.** { *; }
+-dontwarn zhiqiu.hs.**

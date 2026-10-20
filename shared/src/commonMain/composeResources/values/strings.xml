@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="app_name">HouseStudy</string>
+    <string name="app_tagline">八宅风水 · 户型与命理</string>
+
+    <string name="tab_layout">布局</string>
+    <string name="tab_destiny">命理</string>
+    <string name="tab_about">关于</string>
+    <string name="tip_layout">户型布局</string>
+    <string name="tip_destiny">命理推算</string>
+    <string name="tip_about">关于应用</string>
+
+    <string name="layout_title">户型布局</string>
+    <string name="layout_subtitle">点击九宫格放置成员或房间，再查看各方位的吉凶解读</string>
+    <string name="btn_view_analysis">查看解析</string>
+    <string name="btn_save">存档</string>
+    <string name="btn_load">读档</string>
+    <string name="tip_view_analysis">查看各宫位的方位解读</string>
+    <string name="tip_save">保存当前布局方案</string>
+    <string name="tip_load">读取已保存的方案</string>
+    <string name="select_member_title">选择成员 / 房间</string>
+    <string name="action_clear">清空</string>
+    <string name="action_confirm">确定</string>
+    <string name="analysis_title">方位解析</string>
+    <string name="empty_layout">尚未放置任何成员或房间。</string>
+    <string name="no_interpretation">暂无解读</string>
+    <string name="save_title">保存方案</string>
+    <string name="save_name_placeholder">输入方案名称</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_save">保存</string>
+    <string name="archive_title">读取方案</string>
+    <string name="empty_archive">暂无存档。</string>
+    <string name="action_load">读取</string>
+    <string name="action_delete">删除</string>
+    <string name="action_close">关闭</string>
+
+    <string name="destiny_title">命卦推算</string>
+    <string name="destiny_subtitle">输入出生年份与性别，推算八宅命卦与四吉四凶方位</string>
+    <string name="basic_info">基本信息</string>
+    <string name="birth_year_placeholder">出生年份，如 1990</string>
+    <string name="btn_calculate">推算命卦</string>
+    <string name="tip_calculate">按出生年份与性别推算命卦</string>
+    <string name="ming_gua_title">命卦</string>
+    <string name="fortune_title">吉凶方位</string>
+    <string name="four_good">四吉</string>
+    <string name="four_bad">四凶</string>
+    <string name="ming_gua_hint">布局时优先使用四吉方位，避开四凶方位。</string>
+    <string name="trigram_suffix">卦</string>
+    <string name="element_template">%1$s · 五行属%2$s</string>
+    <string name="post_heaven">后天数 %1$s</string>
+    <string name="gender_male">男</string>
+    <string name="gender_female">女</string>
+
+    <string name="about_title">关于</string>
+    <string name="about_subtitle">HouseStudy · 八宅风水</string>
+    <string name="about_intro_title">应用简介</string>
+    <string name="about_intro">以八宅风水（东西四命）为基础，帮助你在九宫格中规划家庭成员与房间的方位布局，并依据出生年份推算个人命卦与吉凶方位。</string>
+    <string name="about_features_title">功能</string>
+    <string name="feat_layout">布局：在九宫格中放置成员或房间，逐宫查看方位解读。</string>
+    <string name="feat_destiny">命理：按出生年份与性别推算命卦、四吉四凶方位。</string>
+    <string name="feat_save">存档：保存多套方案，随时读取对比。</string>
+    <string name="about_note_title">说明</string>
+    <string name="about_note">风水属传统民俗文化，本应用仅供学习与参考，不构成任何决策建议。</string>
+
+    <string name="member_father">父亲</string>
+    <string name="member_mother">母亲</string>
+    <string name="member_eldest_son">长子</string>
+    <string name="member_second_son">次子</string>
+    <string name="member_third_son">三子</string>
+    <string name="member_eldest_daughter">长女</string>
+    <string name="member_second_daughter">次女</string>
+    <string name="member_third_daughter">三女</string>
+    <string name="member_toilet">厕所</string>
+    <string name="member_kitchen">厨房</string>
+    <string name="member_living">客厅</string>
+
+    <string name="dir_nw">西北</string>
+    <string name="dir_w">西</string>
+    <string name="dir_s">南</string>
+    <string name="dir_e">东</string>
+    <string name="dir_se">东南</string>
+    <string name="dir_n">北</string>
+    <string name="dir_ne">东北</string>
+    <string name="dir_sw">西南</string>
+    <string name="dir_center">中宫</string>
+
+    <string name="gua_qian">乾</string>
+    <string name="gua_kun">坤</string>
+    <string name="gua_zhen">震</string>
+    <string name="gua_xun">巽</string>
+    <string name="gua_kan">坎</string>
+    <string name="gua_li">离</string>
+    <string name="gua_gen">艮</string>
+    <string name="gua_dui">兑</string>
+
+    <string name="element_metal">金</string>
+    <string name="element_wood">木</string>
+    <string name="element_water">水</string>
+    <string name="element_fire">火</string>
+    <string name="element_earth">土</string>
+
+    <string name="group_east">东四命</string>
+    <string name="group_west">西四命</string>
+
+    <string name="star_fuwei">伏位</string>
+    <string name="star_shengqi">生气</string>
+    <string name="star_yannian">延年</string>
+    <string name="star_tianyi">天医</string>
+    <string name="star_jueming">绝命</string>
+    <string name="star_wugui">五鬼</string>
+    <string name="star_liusha">六煞</string>
+    <string name="star_huohai">祸害</string>
+</resources>
