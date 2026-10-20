@@ -1,0 +1,26 @@
+# Gradle / build
+.gradle/
+build/
+.kotlin/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Android / local
+local.properties
+*.jks
+*.keystore
+
+# Secrets (contains passwords)
+keyconf.txt
+
+# IDE
+*.iml
+.idea/
+.vscode/
+
+# Xcode (generated)
+*.xcworkspace
+xcuserdata/
+
+# OS
+.DS_Store
