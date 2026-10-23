@@ -37,7 +37,12 @@ import org.jetbrains.compose.resources.stringResource
 import zhiqiu.hs.generated.resources.*
 
 @Composable
-fun AboutScreen(langTag: String, onLangChange: (String) -> Unit) {
+fun AboutScreen(
+    langTag: String,
+    glassStyle: GlassStyle,
+    onLangChange: (String) -> Unit,
+    onGlassStyle: (GlassStyle) -> Unit
+) {
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(bottom = 18.dp)
     ) {
@@ -78,6 +83,25 @@ fun AboutScreen(langTag: String, onLangChange: (String) -> Unit) {
                     langTag == "en",
                     Modifier.weight(1f)
                 ) { onLangChange("en") }
+            }
+        }
+
+        Spacer(Modifier.height(12.dp))
+        AboutCard(stringResource(Res.string.glass_title)) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                LangOption(
+                    stringResource(Res.string.glass_frosted),
+                    glassStyle == GlassStyle.Frosted,
+                    Modifier.weight(1f)
+                ) { onGlassStyle(GlassStyle.Frosted) }
+                LangOption(
+                    stringResource(Res.string.glass_liquid),
+                    glassStyle == GlassStyle.Liquid,
+                    Modifier.weight(1f)
+                ) { onGlassStyle(GlassStyle.Liquid) }
             }
         }
 

@@ -8,6 +8,8 @@ fun main() = application {
         onCloseRequest = ::exitApplication,
         title = "HouseStudy",
     ) {
-        App()
+        ProvideWindowsClipboard {
+            App()
+        }
     }
 }

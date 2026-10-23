@@ -20,7 +20,12 @@ val appVersion: String by rootProject.extra
 compose.desktop {
     application {
         mainClass = "zhiqiu.hs.MainKt"
-        jvmArgs("-Xms64m", "-Xmx512m")
+        jvmArgs(
+            "-Xms64m",
+            "-Xmx512m",
+            // 读取前要清掉 java.awt.datatransfer.Clipboard 的 contents 缓存，否则 Windows 上会粘贴到旧内容
+            "--add-opens=java.desktop/java.awt.datatransfer=ALL-UNNAMED",
+        )
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)

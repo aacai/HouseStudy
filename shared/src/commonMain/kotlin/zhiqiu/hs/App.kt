@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.PlainTooltip
@@ -27,6 +28,7 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -53,30 +55,49 @@ import zhiqiu.hs.ui.AboutScreen
 import zhiqiu.hs.ui.AppBackground
 import zhiqiu.hs.ui.DestinyScreen
 import zhiqiu.hs.ui.GlassCard
+import zhiqiu.hs.ui.GlassStyle
 import zhiqiu.hs.ui.HouseTheme
 import zhiqiu.hs.ui.LayoutScreen
+import zhiqiu.hs.ui.LocalGlassStyle
 import zhiqiu.hs.ui.Palette
 
 @Composable
 fun App() {
     var langTag by remember { mutableStateOf(AppSettings.language()) }
+    var glassStyle by remember { mutableStateOf(GlassStyle.fromStored(AppSettings.glass())) }
     AppLanguageProvider(AppLang.fromTag(langTag)) {
         HouseTheme {
             var tab by remember { mutableIntStateOf(0) }
-            AppBackground {
-                Column(Modifier.fillMaxSize()) {
-                    TopBar()
-                    Box(Modifier.weight(1f).fillMaxWidth()) {
-                        when (tab) {
-                            0 -> LayoutScreen()
-                            1 -> DestinyScreen()
-                            else -> AboutScreen(langTag) { tag ->
-                                langTag = tag
-                                AppSettings.setLanguage(tag)
-                            }
+            CompositionLocalProvider(LocalGlassStyle provides glassStyle) {
+                AppBackground(
+                    overlay = {
+                        Box(Modifier.align(Alignment.BottomCenter).fillMaxWidth()) {
+                            BottomBar(tab) { tab = it }
                         }
                     }
-                    BottomBar(tab) { tab = it }
+                ) {
+                    Column(Modifier.fillMaxSize()) {
+                        TopBar()
+                        Box(Modifier.weight(1f).fillMaxWidth()) {
+                            when (tab) {
+                                0 -> LayoutScreen()
+                                1 -> DestinyScreen()
+                                else -> AboutScreen(
+                                    langTag = langTag,
+                                    glassStyle = glassStyle,
+                                    onLangChange = { tag ->
+                                        langTag = tag
+                                        AppSettings.setLanguage(tag)
+                                    },
+                                    onGlassStyle = { style ->
+                                        glassStyle = style
+                                        AppSettings.setGlass(style.stored())
+                                    }
+                                )
+                            }
+                        }
+                        Spacer(Modifier.height(84.dp))
+                    }
                 }
             }
         }
@@ -120,7 +141,8 @@ private fun BottomBar(selected: Int, onSelect: (Int) -> Unit) {
     ) {
         GlassCard(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(50)
+            shape = CircleShape,
+            forBar = true
         ) {
             Row(
                 Modifier.fillMaxWidth(),

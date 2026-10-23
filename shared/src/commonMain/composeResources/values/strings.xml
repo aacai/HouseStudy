@@ -67,6 +67,10 @@
     <string name="lang_zh">中文</string>
     <string name="lang_en">English</string>
 
+    <string name="glass_title">玻璃样式</string>
+    <string name="glass_frosted">磨砂玻璃</string>
+    <string name="glass_liquid">液态玻璃</string>
+
     <string name="member_father">父亲</string>
     <string name="member_mother">母亲</string>
     <string name="member_eldest_son">长子</string>

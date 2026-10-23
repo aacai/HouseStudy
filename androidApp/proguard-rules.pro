@@ -22,8 +22,8 @@
     @androidx.compose.runtime.Composable *;
 }
 
--keep class com.kashif_e.backdrop.** { *; }
--dontwarn com.kashif_e.backdrop.**
+-keep class com.kyant.backdrop.** { *; }
+-dontwarn com.kyant.backdrop.**
 
 -keep class com.composables.icons.lucide.** { *; }
 -keep class com.composables.icons.lucide.*Kt { *; }
